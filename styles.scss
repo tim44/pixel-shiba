@@ -1,0 +1,108 @@
+$columns: 22;
+$rows: 23;
+$size: 20px;
+
+$t: transparent; // transparent color
+$b: #000; // black color
+$br: #b7620f; // brown color
+$pink: #df4c52; // pink color
+
+@function getShadows($colors-list, $size) {
+    $result: '';
+    $rowsCount: length($colors-list);
+
+    @for $rowIndex from 1 through $rowsCount {
+        $y: ($rowIndex - 1);
+        $row: nth($colors-list, $rowIndex);
+        $numCols: length($row);
+
+        @for $cellIndex from 1 through $numCols {
+            $x: ($cellIndex - 1);
+            $color: nth($row, $cellIndex);
+
+            $separator: ', ';
+
+            @if $x == 0 and $y == 0 {
+                $separator: '';
+            }
+
+            $result: $result + '#{$separator}#{$x * $size} #{$y * $size} #{$color}';
+        }
+    }
+
+    $result: unquote($result);
+
+    @return $result;
+}
+
+@function getShiba($tongue-color: $pink) {
+    @return (
+        ($t, $t, $t, $b, $b, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $b, $b, $t, $t, $t),
+        ($t, $t, $t, $b, $br, $b, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $t, $b, $br, $b, $t, $t, $t),
+        ($t, $t, $b, $br, $br, $br, $b, $t, $t, $t, $t, $t, $t, $t, $t, $t, $b, $br, $br, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $t, $br, $br, $b, $t, $t, $t, $t, $t, $t, $t, $b, $br, $br, $t, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $t, $t, $br, $br, $b, $b, $b, $b, $b, $b, $b, $br, $br, $t, $t, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $t, $t, $br, $b, $br, $br, $br, $br, $br, $br, $br, $b, $br, $t, $t, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $t, $t, $t, $br, $br, $br, $br, $br, $br, $br, $br, $br, $t, $t, $t, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $t, $br, $br, $br, $br, $br, $br, $br, $br, $br, $br, $br, $br, $br, $t, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $br, $br, $br, $t, $t, $t, $br, $br, $br, $t, $t, $t, $br, $br, $br, $br, $b, $t, $t),
+        ($t, $t, $b, $br, $br, $br, $br, $br, $br, $t, $br, $br, $br, $t, $br, $br, $br, $br, $br, $br, $b, $t, $t),
+        ($t, $b, $br, $br, $br, $br, $b, $b, $br, $br, $br, $br, $br, $br, $br, $b, $b, $br, $br, $br, $br, $b, $t),
+        ($b, $br, $br, $br, $br, $br, $b, $b, $b, $br, $t, $t, $br, $br, $b, $b, $b, $br, $br, $br, $br, $br, $b),
+        ($b, $br, $t, $br, $br, $br, $br, $t, $t, $t, $t, $t, $t, $t, $t, $t, $br, $br, $br, $br, $t, $br, $b),
+        ($b, $br, $t, $t, $t, $t, $t, $t, $t, $t, $b, $b, $b, $t, $t, $t, $t, $t, $t, $t, $t, $br, $b),
+        ($b, $br, $t, $t, $t, $t, $t, $b, $t, $t, $t, $b, $t, $t, $t, $b, $t, $t, $t, $t, $t, $br, $b),
+        ($t, $b, $br, $t, $t, $t, $t, $t, $b, $b, $b, $b, $b, $b, $b, $t, $t, $t, $t, $t, $br, $b, $t),
+        ($t, $b, $br, $t, $t, $t, $t, $t, $t, $t, $tongue-color, $tongue-color, $tongue-color, $t, $t, $t, $t, $t, $t, $t, $br, $b, $t),
+        ($t, $t, $b, $br, $br, $t, $t, $t, $t, $t, $tongue-color, $tongue-color, $tongue-color, $t, $t, $t, $t, $t, $br, $br, $b, $t, $t),
+        ($t, $t, $t, $b, $br, $br, $br, $br, $br, $t, $t, $t, $t, $t, $br, $br, $br, $br, $br, $b, $t, $t, $t),
+        ($t, $t, $t, $t, $b, $b, $b, $b, $br, $br, $br, $br, $br, $br, $br, $b, $b, $b, $b, $t, $t, $t, $t),
+        ($t, $t, $t, $t, $t, $t, $t, $t, $b, $b, $b, $b, $b, $b, $b, $t, $t, $t, $t, $t, $t, $t, $t),
+    );
+}
+
+$shadow: getShadows(getShiba($t), $size);
+$shadow-tongue: getShadows(getShiba(), $size);
+
+body {
+    background-color: wheat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#shiba {
+    position: relative;
+    width: $columns * $size;
+    height: $rows * $size;
+
+    &::after {
+        content: '';
+        box-shadow: $shadow-tongue;
+        animation: tongue 1s ease-in-out infinite;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $size;
+        height: $size;
+    }
+}
+
+@keyframes tongue {
+    0% {
+        box-shadow: $shadow-tongue;
+    }
+
+    50% {
+        box-shadow: $shadow;
+    }
+
+    60% {
+        box-shadow: $shadow;
+    }
+
+    100% {
+        box-shadow: $shadow-tongue;
+    }
+}
